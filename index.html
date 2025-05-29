@@ -6,12 +6,6 @@
   <title>แบบฟอร์มเซ็นชื่ออบรม</title>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
     body {
       font-family: 'Sarabun', sans-serif;
       background-color: #e8f4ff;
@@ -19,59 +13,53 @@
       padding: 20px;
     }
 
-    h2 {
-      text-align: center;
-      color: #2980b9;
-      font-size: 24px;
-      font-weight: 600;
-      margin-bottom: 30px;
+    .lang-switch {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .lang-switch button {
+      background: #3498db;
+      color: #fff;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
     }
 
     .container {
       max-width: 640px;
-      margin: auto;
+      margin: 60px auto 0;
       background-color: #ffffff;
       padding: 30px 25px;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     }
 
+    h2 {
+      text-align: center;
+      color: #2980b9;
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+
     label {
       display: block;
       margin-top: 20px;
       font-weight: 600;
-      color: #2c3e50;
     }
 
-    input[type="text"], select {
+    input, select {
       width: 100%;
       padding: 12px 15px;
       font-size: 16px;
       border: 2px solid #b3d9ff;
       border-radius: 10px;
-      background-color: #f0f8ff;
-      transition: all 0.3s ease;
-      font-weight: 400;
-    }
-
-    input::placeholder {
-      color: #aaa;
-    }
-
-    input:focus,
-    select:focus {
-      border-color: #2980b9;
-      background-color: #d6f0ff;
-      outline: none;
-    }
-
-    select {
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%232980b9' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 10px center;
-      background-size: 16px;
-      padding-right: 40px;
+      margin-top: 8px;
     }
 
     canvas {
@@ -79,35 +67,25 @@
       height: auto;
       border: 2px dashed #3498db;
       border-radius: 10px;
-      background-color: #fff;
-      margin-top: 15px;
+      margin-top: 20px;
       touch-action: none;
-      cursor: crosshair;
     }
 
     .buttons {
       display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
       gap: 10px;
       margin-top: 20px;
     }
 
-    button {
-      flex: 1 1 48%;
+    .buttons button {
+      flex: 1;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
       background-color: #3498db;
       color: white;
-      border: none;
-      padding: 14px 20px;
-      font-size: 16px;
-      border-radius: 10px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
-      font-weight: 600;
-    }
-
-    button:hover {
-      background-color: #2980b9;
     }
 
     .toast {
@@ -128,42 +106,109 @@
     .toast.show {
       opacity: 1;
     }
-
-    @media (max-width: 480px) {
-      button {
-        flex: 1 1 100%;
-      }
-    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>แบบฟอร์มเซ็นชื่อเข้าอบรม</h2>
+  <div class="lang-switch">
+    <button onclick="switchLang('th')">ไทย</button>
+    <button onclick="switchLang('en')">EN</button>
+    <button onclick="switchLang('mm')">မြန်မာ</button>
+  </div>
 
+  <div class="container">
+    <h2 id="formTitle">แบบฟอร์มเซ็นชื่อเข้าอบรม</h2>
+    <label id="nameLabel" for="fullName">ชื่อ-นามสกุล</label>
     <input type="text" id="fullName" placeholder="กรอกชื่อ-นามสกุล" required>
+
+    <label id="dateLabel">วันที่</label>
     <input type="text" id="dateField" readonly>
 
-    <label for="trainingTopic">เลือกหัวข้ออบรม:</label>
+    <label id="topicLabel" for="trainingTopic">หัวข้ออบรม</label>
     <select id="trainingTopic" required>
       <option value="">-- กรุณาเลือกหัวข้อ --</option>
       <option value="5ส">5ส</option>
-      <option value="kaizen">kaizen</option>
-      <option value="อบรมด้านความปลอดภัย">อบรมด้านความปลอดภัย</option>
-      <option value="อบรมเกี่ยวกับไฟฟ้า">อบรมเกี่ยวกับไฟฟ้า</option>
-      <option value="อบรมเกี่ยวเครื่องปรับอากาศ">อบรมเกี่ยวเครื่องปรับอากาศ</option>
+      <option value="kaizen">Kaizen</option>
+      <option value="safety">ความปลอดภัย</option>
+      <option value="electrical">ไฟฟ้า</option>
+      <option value="aircon">เครื่องปรับอากาศ</option>
     </select>
 
     <canvas id="signature-pad" width="600" height="300"></canvas>
 
     <div class="buttons">
-      <button onclick="clearCanvas()">ล้างลายเซ็น</button>
-      <button id="saveBtn" onclick="saveData(event)">บันทึกข้อมูล</button>
+      <button onclick="clearCanvas()" id="clearBtn">ล้างลายเซ็น</button>
+      <button onclick="saveData(event)" id="saveBtn">บันทึกข้อมูล</button>
     </div>
   </div>
 
   <div class="toast" id="toast"></div>
 
   <script>
+    const langPack = {
+      th: {
+        formTitle: "แบบฟอร์มเซ็นชื่อเข้าอบรม",
+        nameLabel: "ชื่อ-นามสกุล",
+        dateLabel: "วันที่",
+        topicLabel: "หัวข้ออบรม",
+        clearBtn: "ล้างลายเซ็น",
+        saveBtn: "บันทึกข้อมูล",
+        placeholder: "กรอกชื่อ-นามสกุล",
+        alerts: {
+          name: "กรุณากรอกชื่อ-นามสกุล",
+          topic: "กรุณาเลือกหัวข้ออบรม",
+          sign: "กรุณาเซ็นชื่อก่อน",
+          success: "บันทึกข้อมูลสำเร็จ",
+          error: "เกิดข้อผิดพลาด"
+        }
+      },
+      en: {
+        formTitle: "Training Sign-in Form",
+        nameLabel: "Full Name",
+        dateLabel: "Date",
+        topicLabel: "Training Topic",
+        clearBtn: "Clear Signature",
+        saveBtn: "Save",
+        placeholder: "Enter your full name",
+        alerts: {
+          name: "Please enter your name",
+          topic: "Please select a topic",
+          sign: "Please sign before saving",
+          success: "Saved successfully",
+          error: "Error occurred"
+        }
+      },
+      mm: {
+        formTitle: "သင်တန်းတက်ရောက်သူ လက်မှတ်ရေးထိုးဖောင်",
+        nameLabel: "အမည်အပြည့်အစုံ",
+        dateLabel: "ရက်စွဲ",
+        topicLabel: "သင်တန်းအကြောင်းအရာ",
+        clearBtn: "လက်မှတ်ဖျက်ရန်",
+        saveBtn: "သိမ်းမည်",
+        placeholder: "အမည်ထည့်ပါ",
+        alerts: {
+          name: "အမည်ထည့်ပါ",
+          topic: "သင်တန်းအကြောင်းရွေးပါ",
+          sign: "လက်မှတ်ရေးပါ",
+          success: "သိမ်းဆည်းပြီးပါပြီ",
+          error: "အမှားအယွင်းရှိသည်"
+        }
+      }
+    };
+
+    let currentLang = 'th';
+
+    function switchLang(lang) {
+      currentLang = lang;
+      const l = langPack[lang];
+      document.getElementById('formTitle').textContent = l.formTitle;
+      document.getElementById('nameLabel').textContent = l.nameLabel;
+      document.getElementById('dateLabel').textContent = l.dateLabel;
+      document.getElementById('topicLabel').textContent = l.topicLabel;
+      document.getElementById('clearBtn').textContent = l.clearBtn;
+      document.getElementById('saveBtn').textContent = l.saveBtn;
+      document.getElementById('fullName').placeholder = l.placeholder;
+    }
+
     document.getElementById('dateField').value = new Date().toLocaleDateString('th-TH');
 
     const canvas = document.getElementById('signature-pad');
@@ -176,17 +221,13 @@
       ctx.beginPath();
       ctx.moveTo(e.offsetX, e.offsetY);
     });
-
     canvas.addEventListener('mousemove', (e) => {
       if (isDrawing) {
         ctx.lineTo(e.offsetX, e.offsetY);
         ctx.stroke();
       }
     });
-
-    canvas.addEventListener('mouseup', () => {
-      isDrawing = false;
-    });
+    canvas.addEventListener('mouseup', () => isDrawing = false);
 
     canvas.addEventListener('touchstart', (e) => {
       e.preventDefault();
@@ -195,7 +236,6 @@
       ctx.beginPath();
       ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
     });
-
     canvas.addEventListener('touchmove', (e) => {
       e.preventDefault();
       const touch = e.touches[0];
@@ -219,9 +259,7 @@
       const toast = document.getElementById('toast');
       toast.textContent = message;
       toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 3000);
+      setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
     function clearForm() {
@@ -233,35 +271,23 @@
 
     function saveData(event) {
       const fullName = document.getElementById('fullName').value.trim();
-      const date = document.getElementById('dateField').value;
       const topic = document.getElementById('trainingTopic').value;
       const saveBtn = event.target;
+      const t = langPack[currentLang].alerts;
 
-      if (!fullName) {
-        showToast('กรุณากรอกชื่อ-นามสกุล');
-        return;
-      }
+      if (!fullName) return showToast(t.name);
+      if (!topic) return showToast(t.topic);
+      if (isCanvasBlank(canvas)) return showToast(t.sign);
 
-      if (!topic) {
-        showToast('กรุณาเลือกหัวข้ออบรม');
-        return;
-      }
-
-      if (isCanvasBlank(canvas)) {
-        showToast('กรุณาเซ็นชื่อก่อน');
-        return;
-      }
-
-      const signatureImage = canvas.toDataURL('image/png');
       const data = {
         name: fullName,
-        date: date,
+        date: new Date().toLocaleDateString('th-TH'),
         topic: topic,
-        signature: signatureImage
+        signature: canvas.toDataURL('image/png')
       };
 
       saveBtn.disabled = true;
-      saveBtn.textContent = 'กำลังบันทึก...';
+      saveBtn.textContent = langPack[currentLang].saveBtn + '...';
 
       fetch('https://script.google.com/macros/s/AKfycbzfxFGrXjyfLfXBza4dXaf-_RNKiehJZs4FuJyAcdTfvj29Uzw3lehg5cqQlMfRDUapew/exec', {
         method: 'POST',
@@ -270,17 +296,17 @@
         body: JSON.stringify(data)
       })
       .then(() => {
-        showToast('บันทึกข้อมูลสำเร็จ');
+        showToast(t.success);
         clearForm();
       })
-      .catch(() => {
-        showToast('เกิดข้อผิดพลาดในการบันทึก');
-      })
+      .catch(() => showToast(t.error))
       .finally(() => {
         saveBtn.disabled = false;
-        saveBtn.textContent = 'บันทึกข้อมูล';
+        saveBtn.textContent = langPack[currentLang].saveBtn;
       });
     }
+
+    switchLang('th'); // ตั้งค่าเริ่มต้นเป็นภาษาไทย
   </script>
 </body>
 </html>
