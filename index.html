@@ -6,7 +6,6 @@
   <title>แบบฟอร์มเซ็นชื่ออบรม</title>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun&display=swap" rel="stylesheet">
   <style>
-    /* Reset & Base Styles */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -35,18 +34,6 @@
       padding: 30px 25px;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-      animation: fadeInUp 0.6s ease-out;
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
 
     label {
@@ -79,10 +66,8 @@
     }
 
     select {
-      -webkit-appearance: none;
-      -moz-appearance: none;
       appearance: none;
-      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%232980b9' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%232980b9' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 10px center;
       background-size: 16px;
@@ -125,18 +110,6 @@
       background-color: #2980b9;
     }
 
-    @media (max-width: 480px) {
-      button {
-        flex: 1 1 100%;
-      }
-    }
-    @media (max-width: 768px) {
-      #signature-pad {
-        height: 200px;
-      }
-    }
-
-    /* Toast Notification */
     .toast {
       position: fixed;
       bottom: 20px;
@@ -155,8 +128,13 @@
     .toast.show {
       opacity: 1;
     }
+
+    @media (max-width: 480px) {
+      button {
+        flex: 1 1 100%;
+      }
+    }
   </style>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
   <div class="container">
@@ -170,7 +148,7 @@
       <option value="">-- กรุณาเลือกหัวข้อ --</option>
       <option value="5ส">5ส</option>
       <option value="kaizen">kaizen</option>
-      <option value="การบำรุงรักษาแอร์">การบำรุงรักษาแอร์</option>
+      <option value="อบรมด้านความปลอดภัย">อบรมด้านความปลอดภัย</option>
       <option value="อบรมเกี่ยวกับไฟฟ้า">อบรมเกี่ยวกับไฟฟ้า</option>
       <option value="อบรมเกี่ยวเครื่องปรับอากาศ">อบรมเกี่ยวเครื่องปรับอากาศ</option>
     </select>
@@ -179,9 +157,11 @@
 
     <div class="buttons">
       <button onclick="clearCanvas()">ล้างลายเซ็น</button>
-      <button onclick="saveData()">บันทึกข้อมูล</button>
+      <button id="saveBtn" onclick="saveData(event)">บันทึกข้อมูล</button>
     </div>
   </div>
+
+  <div class="toast" id="toast"></div>
 
   <script>
     document.getElementById('dateField').value = new Date().toLocaleDateString('th-TH');
@@ -224,8 +204,24 @@
       ctx.stroke();
     });
 
+    function isCanvasBlank(c) {
+      const blank = document.createElement('canvas');
+      blank.width = c.width;
+      blank.height = c.height;
+      return c.toDataURL() === blank.toDataURL();
+    }
+
     function clearCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
     }
 
     function clearForm() {
@@ -235,22 +231,28 @@
       clearCanvas();
     }
 
-    function saveData() {
+    function saveData(event) {
       const fullName = document.getElementById('fullName').value.trim();
       const date = document.getElementById('dateField').value;
       const topic = document.getElementById('trainingTopic').value;
+      const saveBtn = event.target;
 
       if (!fullName) {
-        alert('กรุณากรอกชื่อ-นามสกุลก่อน');
+        showToast('กรุณากรอกชื่อ-นามสกุล');
         return;
       }
+
       if (!topic) {
-        alert('กรุณาเลือกหัวข้ออบรมก่อน');
+        showToast('กรุณาเลือกหัวข้ออบรม');
+        return;
+      }
+
+      if (isCanvasBlank(canvas)) {
+        showToast('กรุณาเซ็นชื่อก่อน');
         return;
       }
 
       const signatureImage = canvas.toDataURL('image/png');
-
       const data = {
         name: fullName,
         date: date,
@@ -258,15 +260,26 @@
         signature: signatureImage
       };
 
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'กำลังบันทึก...';
+
       fetch('https://script.google.com/macros/s/AKfycbzfxFGrXjyfLfXBza4dXaf-_RNKiehJZs4FuJyAcdTfvj29Uzw3lehg5cqQlMfRDUapew/exec', {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
+      })
+      .then(() => {
+        showToast('บันทึกข้อมูลสำเร็จ');
+        clearForm();
+      })
+      .catch(() => {
+        showToast('เกิดข้อผิดพลาดในการบันทึก');
+      })
+      .finally(() => {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'บันทึกข้อมูล';
       });
-
-      alert('บันทึกข้อมูลสำเร็จ');
-      clearForm();
     }
   </script>
 </body>
