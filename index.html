@@ -3,14 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>แบบฟอร์มเซ็นชื่ออบรม</title>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun&display=swap" rel="stylesheet">
+  <title>แบบฟอร์มเซ็นชื่ออบรม (Responsive)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #3498db;
+      --secondary-color: #2980b9;
+      --light-color: #ffffff;
+      --grey-color: #bdc3c7;
+      --light-grey-color: #ecf0f1;
+      --success-color: #2ecc71;
+      --error-color: #e74c3c;
+      --text-color: #34495e;
+      --background-gradient: linear-gradient(135deg, #f3f9ff 0%, #e0ecf9 100%);
+    }
+
     body {
       font-family: 'Sarabun', sans-serif;
-      background-color: #e8f4ff;
-      color: #333;
+      background: var(--background-gradient);
+      color: var(--text-color);
       padding: 20px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     .lang-switch {
@@ -22,101 +37,214 @@
     }
 
     .lang-switch button {
-      background: #3498db;
-      color: #fff;
-      border: none;
-      padding: 6px 10px;
-      border-radius: 6px;
+      background: var(--light-color);
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+      padding: 6px 12px;
+      border-radius: 8px;
       cursor: pointer;
       font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .lang-switch button:hover, .lang-switch button.active {
+      background: var(--primary-color);
+      color: var(--light-color);
     }
 
     .container {
       max-width: 640px;
-      margin: 60px auto 0;
-      background-color: #ffffff;
-      padding: 30px 25px;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      margin: 80px auto 20px;
+      background-color: var(--light-color);
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 12px 35px rgba(41, 128, 185, 0.15);
+      transition: all 0.3s ease;
     }
 
     h2 {
       text-align: center;
-      color: #2980b9;
-      font-size: 24px;
-      margin-bottom: 30px;
+      color: var(--secondary-color);
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 35px;
     }
 
     label {
       display: block;
       margin-top: 20px;
       font-weight: 600;
+      font-size: 16px;
+      color: var(--text-color);
     }
 
     input, select {
       width: 100%;
       padding: 12px 15px;
       font-size: 16px;
-      border: 2px solid #b3d9ff;
+      border: 2px solid #dfe9f5;
       border-radius: 10px;
       margin-top: 8px;
+      transition: border-color 0.3s ease;
+      box-sizing: border-box; 
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+    
+    input#dateField {
+        background-color: #f8f9fa;
+        color: #555;
     }
 
     canvas {
       width: 100%;
       height: auto;
-      border: 2px dashed #3498db;
+      border: 2px solid #dfe9f5;
       border-radius: 10px;
-      margin-top: 20px;
+      margin-top: 15px;
       touch-action: none;
+      cursor: crosshair;
+      background-color: #fdfdfd;
     }
 
     .buttons {
       display: flex;
-      gap: 10px;
-      margin-top: 20px;
+      gap: 15px;
+      margin-top: 30px;
     }
 
     .buttons button {
       flex: 1;
-      padding: 12px;
-      font-size: 16px;
+      padding: 14px;
+      font-size: 18px;
+      font-weight: 600;
       border: none;
       border-radius: 10px;
-      background-color: #3498db;
       color: white;
       cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    #saveBtn {
+        background-color: var(--primary-color);
+    }
+    
+    #saveBtn:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-2px);
+    }
+
+    #saveBtn:disabled {
+        background-color: var(--grey-color);
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    #clearBtn {
+        background-color: var(--light-grey-color);
+        color: var(--text-color);
+        border: 2px solid var(--light-grey-color);
+    }
+
+    #clearBtn:hover {
+        background-color: #dce4e7;
+        border-color: #dce4e7;
     }
 
     .toast {
       position: fixed;
-      bottom: 20px;
+      bottom: 25px;
       left: 50%;
-      transform: translateX(-50%);
-      background-color: #2ecc71;
+      transform: translateX(-50%) translateY(100px);
       color: white;
-      padding: 12px 24px;
-      border-radius: 8px;
+      padding: 14px 28px;
+      border-radius: 10px;
       font-size: 16px;
+      font-weight: 600;
       z-index: 9999;
       opacity: 0;
-      transition: opacity 0.3s ease-in-out;
+      transition: all 0.4s cubic-bezier(0.21, 1.02, 0.73, 1);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
 
     .toast.show {
       opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
+
+    .toast.success { background-color: var(--success-color); }
+    .toast.error { background-color: var(--error-color); }
+
+    /* --- Responsive Design for Tablets and Mobiles --- */
+
+    /* For Tablets (e.g., iPad Portrait) */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+      .container {
+        margin-top: 70px;
+        padding: 25px 25px;
+      }
+      h2 {
+        font-size: 26px;
+      }
+      .lang-switch {
+        top: 15px;
+        right: 15px;
+      }
+    }
+
+    /* For Mobile Phones */
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      .container {
+        margin-top: 60px;
+        padding: 20px 15px;
+      }
+      h2 {
+        font-size: 22px;
+        margin-bottom: 25px;
+      }
+      .lang-switch {
+        gap: 5px;
+      }
+      .lang-switch button {
+        padding: 5px 10px;
+        font-size: 12px;
+      }
+      .buttons {
+        flex-direction: column; /* Stack buttons vertically */
+        gap: 12px;
+      }
+      .buttons button {
+        padding: 12px;
+        font-size: 16px;
+      }
+      .toast {
+        width: 90%;
+        text-align: center;
+      }
+    }
+
   </style>
 </head>
 <body>
   <div class="lang-switch">
-    <button onclick="switchLang('th')">ไทย</button>
-    <button onclick="switchLang('en')">EN</button>
-    <button onclick="switchLang('mm')">မြန်မာ</button>
+    <button onclick="switchLang('th')" id="lang-th" class="active">ไทย</button>
+    <button onclick="switchLang('en')" id="lang-en">EN</button>
+    <button onclick="switchLang('mm')" id="lang-mm">မြန်မာ</button>
   </div>
 
   <div class="container">
     <h2 id="formTitle">แบบฟอร์มเซ็นชื่อเข้าอบรม</h2>
+    
     <label id="nameLabel" for="fullName">ชื่อ-นามสกุล</label>
     <input type="text" id="fullName" placeholder="กรอกชื่อ-นามสกุล" required>
 
@@ -133,6 +261,7 @@
       <option value="aircon">เครื่องปรับอากาศ</option>
     </select>
 
+    <label id="signLabel">ลายเซ็น</label>
     <canvas id="signature-pad" width="600" height="300"></canvas>
 
     <div class="buttons">
@@ -141,7 +270,7 @@
     </div>
   </div>
 
-  <div class="toast" id="toast"></div>
+  <div id="toast" class="toast"></div>
 
   <script>
     const langPack = {
@@ -150,15 +279,16 @@
         nameLabel: "ชื่อ-นามสกุล",
         dateLabel: "วันที่",
         topicLabel: "หัวข้ออบรม",
+        signLabel: "ลายเซ็น",
         clearBtn: "ล้างลายเซ็น",
         saveBtn: "บันทึกข้อมูล",
         placeholder: "กรอกชื่อ-นามสกุล",
         alerts: {
           name: "กรุณากรอกชื่อ-นามสกุล",
           topic: "กรุณาเลือกหัวข้ออบรม",
-          sign: "กรุณาเซ็นชื่อก่อน",
+          sign: "กรุณาเซ็นชื่อก่อนบันทึก",
           success: "บันทึกข้อมูลสำเร็จ",
-          error: "เกิดข้อผิดพลาด"
+          error: "เกิดข้อผิดพลาดในการบันทึก"
         }
       },
       en: {
@@ -166,22 +296,24 @@
         nameLabel: "Full Name",
         dateLabel: "Date",
         topicLabel: "Training Topic",
+        signLabel: "Signature",
         clearBtn: "Clear Signature",
-        saveBtn: "Save",
+        saveBtn: "Save Data",
         placeholder: "Enter your full name",
         alerts: {
           name: "Please enter your name",
           topic: "Please select a topic",
           sign: "Please sign before saving",
           success: "Saved successfully",
-          error: "Error occurred"
+          error: "An error occurred while saving"
         }
       },
       mm: {
         formTitle: "သင်တန်းတက်ရောက်သူ လက်မှတ်ရေးထိုးဖောင်",
-        nameLabel: "အမည်အပြည့်အစုံ",
+        nameLabel: "အမည်အပြည့်အစုံ",
         dateLabel: "ရက်စွဲ",
         topicLabel: "သင်တန်းအကြောင်းအရာ",
+        signLabel: "လက်မှတ်",
         clearBtn: "လက်မှတ်ဖျက်ရန်",
         saveBtn: "သိမ်းမည်",
         placeholder: "အမည်ထည့်ပါ",
@@ -204,68 +336,115 @@
       document.getElementById('nameLabel').textContent = l.nameLabel;
       document.getElementById('dateLabel').textContent = l.dateLabel;
       document.getElementById('topicLabel').textContent = l.topicLabel;
+      document.getElementById('signLabel').textContent = l.signLabel;
       document.getElementById('clearBtn').textContent = l.clearBtn;
       document.getElementById('saveBtn').textContent = l.saveBtn;
       document.getElementById('fullName').placeholder = l.placeholder;
+      
+      document.querySelectorAll('.lang-switch button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.getElementById(`lang-${lang}`).classList.add('active');
     }
 
-    document.getElementById('dateField').value = new Date().toLocaleDateString('th-TH');
+    document.getElementById('dateField').value = new Date().toLocaleDateString('th-TH', {
+        year: 'numeric', month: 'long', day: 'numeric'
+    });
 
     const canvas = document.getElementById('signature-pad');
     const ctx = canvas.getContext('2d');
-    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = '#34495e';
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
     let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
 
-    canvas.addEventListener('mousedown', (e) => {
-      isDrawing = true;
-      ctx.beginPath();
-      ctx.moveTo(e.offsetX, e.offsetY);
-    });
-    canvas.addEventListener('mousemove', (e) => {
-      if (isDrawing) {
-        ctx.lineTo(e.offsetX, e.offsetY);
+    function getMousePos(canvasDom, mouseEvent) {
+      const rect = canvasDom.getBoundingClientRect();
+      return {
+        x: mouseEvent.clientX - rect.left,
+        y: mouseEvent.clientY - rect.top
+      };
+    }
+
+    function getTouchPos(canvasDom, touchEvent) {
+        const rect = canvasDom.getBoundingClientRect();
+        return {
+            x: touchEvent.touches[0].clientX - rect.left,
+            y: touchEvent.touches[0].clientY - rect.top
+        };
+    }
+
+    function draw(e) {
+        if (!isDrawing) return;
+        
+        let pos;
+        if (e.type.startsWith('touch')) {
+            e.preventDefault();
+            pos = getTouchPos(canvas, e);
+        } else {
+            pos = getMousePos(canvas, e);
+        }
+
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(pos.x, pos.y);
         ctx.stroke();
-      }
-    });
-    canvas.addEventListener('mouseup', () => isDrawing = false);
+        [lastX, lastY] = [pos.x, pos.y];
+    }
 
-    canvas.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      ctx.beginPath();
-      ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
-    });
-    canvas.addEventListener('touchmove', (e) => {
-      e.preventDefault();
-      const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
-      ctx.stroke();
-    });
+    function startDrawing(e) {
+        isDrawing = true;
+        let pos;
+        if (e.type.startsWith('touch')) {
+            e.preventDefault();
+            pos = getTouchPos(canvas, e);
+        } else {
+            pos = getMousePos(canvas, e);
+        }
+        [lastX, lastY] = [pos.x, pos.y];
+    }
+    
+    function stopDrawing() {
+        isDrawing = false;
+    }
+
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+
+    canvas.addEventListener('touchstart', startDrawing);
+    canvas.addEventListener('touchmove', draw);
+    canvas.addEventListener('touchend', stopDrawing);
 
     function isCanvasBlank(c) {
-      const blank = document.createElement('canvas');
-      blank.width = c.width;
-      blank.height = c.height;
-      return c.toDataURL() === blank.toDataURL();
+      return !c.getContext('2d')
+        .getImageData(0, 0, c.width, c.height).data
+        .some(channel => channel !== 0);
     }
 
     function clearCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
-    function showToast(message) {
+    function showToast(message, type = 'success') {
       const toast = document.getElementById('toast');
       toast.textContent = message;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3000);
+      toast.className = `toast show ${type}`;
+      setTimeout(() => {
+        toast.className = toast.className.replace('show', '');
+      }, 3000);
     }
 
     function clearForm() {
       document.getElementById('fullName').value = '';
       document.getElementById('trainingTopic').value = '';
-      document.getElementById('dateField').value = new Date().toLocaleDateString('th-TH');
+      document.getElementById('dateField').value = new Date().toLocaleDateString('th-TH', {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
       clearCanvas();
     }
 
@@ -275,9 +454,9 @@
       const saveBtn = event.target;
       const t = langPack[currentLang].alerts;
 
-      if (!fullName) return showToast(t.name);
-      if (!topic) return showToast(t.topic);
-      if (isCanvasBlank(canvas)) return showToast(t.sign);
+      if (!fullName) return showToast(t.name, 'error');
+      if (!topic) return showToast(t.topic, 'error');
+      if (isCanvasBlank(canvas)) return showToast(t.sign, 'error');
 
       const data = {
         name: fullName,
@@ -287,26 +466,32 @@
       };
 
       saveBtn.disabled = true;
-      saveBtn.textContent = langPack[currentLang].saveBtn + '...';
+      const originalBtnText = langPack[currentLang].saveBtn;
+      saveBtn.textContent = originalBtnText + '...';
 
-      fetch('https://script.google.com/macros/s/AKfycbzfxFGrXjyfLfXBza4dXaf-_RNKiehJZs4FuJyAcdTfvj29Uzw3lehg5cqQlMfRDUapew/exec', {
+      const googleScriptURL = 'https://script.google.com/macros/s/AKfycbzfxFGrXjyfLfXBza4dXaf-_RNKiehJZs4FuJyAcdTfvj29Uzw3lehg5cqQlMfRDUapew/exec';
+
+      fetch(googleScriptURL, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       })
       .then(() => {
-        showToast(t.success);
+        showToast(t.success, 'success');
         clearForm();
       })
-      .catch(() => showToast(t.error))
+      .catch((error) => {
+        console.error("Fetch Error:", error);
+        showToast(t.error, 'error');
+      })
       .finally(() => {
         saveBtn.disabled = false;
-        saveBtn.textContent = langPack[currentLang].saveBtn;
+        saveBtn.textContent = originalBtnText;
       });
     }
 
-    switchLang('th'); // ตั้งค่าเริ่มต้นเป็นภาษาไทย
+    switchLang('th');
   </script>
 </body>
 </html>
