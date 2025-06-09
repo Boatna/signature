@@ -457,6 +457,7 @@
       if (!fullName) return showToast(t.name, 'error');
       if (!topic) return showToast(t.topic, 'error');
       if (isCanvasBlank(canvas)) return showToast(t.sign, 'error');
+      if (saveBtn.disabled) return;
 
       const data = {
         name: fullName,
