@@ -3,256 +3,161 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>แบบฟอร์มเซ็นชื่ออบรม (Responsive)</title>
+  <title>ฟอร์มเซ็นชื่ออบรมออนไลน์</title>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --primary-color: #3498db;
-      --secondary-color: #2980b9;
-      --light-color: #ffffff;
-      --grey-color: #bdc3c7;
-      --light-grey-color: #ecf0f1;
-      --success-color: #2ecc71;
-      --error-color: #e74c3c;
-      --text-color: #34495e;
-      --background-gradient: linear-gradient(135deg, #f3f9ff 0%, #e0ecf9 100%);
+    /* Reset & Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Sarabun', sans-serif;
     }
 
     body {
-      font-family: 'Sarabun', sans-serif;
-      background: var(--background-gradient);
-      color: var(--text-color);
-      padding: 20px;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    .lang-switch {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      display: flex;
-      gap: 8px;
-    }
-
-    .lang-switch button {
-      background: var(--light-color);
-      color: var(--primary-color);
-      border: 1px solid var(--primary-color);
-      padding: 6px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    .lang-switch button:hover, .lang-switch button.active {
-      background: var(--primary-color);
-      color: var(--light-color);
+      background: linear-gradient(135deg, #dceefb, #e0ecf9, #f0f5fb);
+      padding: 40px 20px;
+      color: #333;
     }
 
     .container {
-      max-width: 640px;
-      margin: 80px auto 20px;
-      background-color: var(--light-color);
-      padding: 30px 40px;
+      max-width: 650px;
+      margin: auto;
+      background: #ffffffcc;
+      backdrop-filter: blur(10px);
+      padding: 40px;
       border-radius: 20px;
-      box-shadow: 0 12px 35px rgba(41, 128, 185, 0.15);
-      transition: all 0.3s ease;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     h2 {
       text-align: center;
-      color: var(--secondary-color);
-      font-size: 28px;
+      color: #2980b9;
       font-weight: 700;
-      margin-bottom: 35px;
+      margin-bottom: 30px;
+      font-size: 1.8rem;
     }
 
     label {
       display: block;
       margin-top: 20px;
       font-weight: 600;
-      font-size: 16px;
-      color: var(--text-color);
+      color: #2c3e50;
     }
 
-    input, select {
+    input,
+    select {
       width: 100%;
-      padding: 12px 15px;
-      font-size: 16px;
-      border: 2px solid #dfe9f5;
-      border-radius: 10px;
+      padding: 12px;
       margin-top: 8px;
-      transition: border-color 0.3s ease;
-      box-sizing: border-box; 
-    }
-
-    input:focus, select:focus {
-      outline: none;
-      border-color: var(--primary-color);
-    }
-    
-    input#dateField {
-        background-color: #f8f9fa;
-        color: #555;
-    }
-
-    canvas {
-      width: 100%;
-      height: auto;
-      border: 2px solid #dfe9f5;
+      font-size: 16px;
+      border: 1px solid #a9cce3;
       border-radius: 10px;
-      margin-top: 15px;
-      touch-action: none;
-      cursor: crosshair;
-      background-color: #fdfdfd;
+      transition: border-color 0.3s ease;
+      background-color: #f8f9fa;
     }
 
-    .buttons {
-      display: flex;
-      gap: 15px;
-      margin-top: 30px;
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
     }
 
-    .buttons button {
-      flex: 1;
+    input[readonly] {
+      background-color: #f1f1f1;
+      cursor: not-allowed;
+    }
+
+    button {
+      margin-top: 25px;
+      width: 100%;
       padding: 14px;
-      font-size: 18px;
-      font-weight: 600;
+      background: linear-gradient(to right, #3498db, #2980b9);
+      color: white;
+      font-weight: bold;
       border: none;
       border-radius: 10px;
-      color: white;
+      font-size: 16px;
       cursor: pointer;
       transition: all 0.3s ease;
     }
-    
-    #saveBtn {
-        background-color: var(--primary-color);
-    }
-    
-    #saveBtn:hover {
-        background-color: var(--secondary-color);
-        transform: translateY(-2px);
+
+    button:hover {
+      background: linear-gradient(to right, #2980b9, #3498db);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
 
-    #saveBtn:disabled {
-        background-color: var(--grey-color);
-        cursor: not-allowed;
-        transform: none;
-    }
-
-    #clearBtn {
-        background-color: var(--light-grey-color);
-        color: var(--text-color);
-        border: 2px solid var(--light-grey-color);
-    }
-
-    #clearBtn:hover {
-        background-color: #dce4e7;
-        border-color: #dce4e7;
-    }
-
-    .toast {
-      position: fixed;
-      bottom: 25px;
-      left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      color: white;
-      padding: 14px 28px;
+    canvas {
+      margin-top: 20px;
+      width: 100%;
+      height: auto;
+      border: 2px dashed #a9cce3;
       border-radius: 10px;
+      background: #fff;
+      cursor: crosshair;
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2ecc71;
+      color: white;
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-weight: bold;
       font-size: 16px;
-      font-weight: 600;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
       z-index: 9999;
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(0.21, 1.02, 0.73, 1);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      display: none;
+      animation: slideInUp 0.5s ease forwards, fadeOut 3s ease-in 0.5s forwards;
     }
 
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    .toast.success { background-color: var(--success-color); }
-    .toast.error { background-color: var(--error-color); }
-
-    /* --- Responsive Design for Tablets and Mobiles --- */
-
-    /* For Tablets (e.g., iPad Portrait) */
-    @media (max-width: 768px) {
-      body {
-        padding: 15px;
+    @keyframes slideInUp {
+      from {
+        transform: translateX(-50%) translateY(30px);
+        opacity: 0;
       }
-      .container {
-        margin-top: 70px;
-        padding: 25px 25px;
-      }
-      h2 {
-        font-size: 26px;
-      }
-      .lang-switch {
-        top: 15px;
-        right: 15px;
+      to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
       }
     }
 
-    /* For Mobile Phones */
-    @media (max-width: 480px) {
-      body {
-        padding: 10px;
-      }
-      .container {
-        margin-top: 60px;
-        padding: 20px 15px;
-      }
-      h2 {
-        font-size: 22px;
-        margin-bottom: 25px;
-      }
-      .lang-switch {
-        gap: 5px;
-      }
-      .lang-switch button {
-        padding: 5px 10px;
-        font-size: 12px;
-      }
-      .buttons {
-        flex-direction: column; /* Stack buttons vertically */
-        gap: 12px;
-      }
-      .buttons button {
-        padding: 12px;
-        font-size: 16px;
-      }
-      .toast {
-        width: 90%;
-        text-align: center;
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        visibility: hidden;
       }
     }
-
   </style>
 </head>
 <body>
-  <div class="lang-switch">
-    <button onclick="switchLang('th')" id="lang-th" class="active">ไทย</button>
-    <button onclick="switchLang('en')" id="lang-en">EN</button>
-    <button onclick="switchLang('mm')" id="lang-mm">မြန်မာ</button>
-  </div>
-
   <div class="container">
-    <h2 id="formTitle">แบบฟอร์มเซ็นชื่อเข้าอบรม</h2>
-    
-    <label id="nameLabel" for="fullName">ชื่อ-นามสกุล</label>
-    <input type="text" id="fullName" placeholder="กรอกชื่อ-นามสกุล" required>
+    <h2>แบบฟอร์มเซ็นชื่ออบรม</h2>
 
-    <label id="dateLabel">วันที่</label>
+    <label for="empId">รหัสพนักงาน</label>
+    <input type="text" id="empId" placeholder="กรอกรหัสพนักงาน" pattern="\d*" inputmode="numeric">
+
+    <button type="button" onclick="lookupEmployee()">ค้นหา</button>
+
+    <label for="fullName">ชื่อ-นามสกุล</label>
+    <input type="text" id="fullName" readonly placeholder="ชื่อจะถูกเติมอัตโนมัติ">
+
+    <label for="dateField">วันที่</label>
     <input type="text" id="dateField" readonly>
 
-    <label id="topicLabel" for="trainingTopic">หัวข้ออบรม</label>
-    <select id="trainingTopic" required>
+    <label for="trainingTopic">หัวข้ออบรม</label>
+    <select id="trainingTopic">
       <option value="">-- กรุณาเลือกหัวข้อ --</option>
       <option value="5ส">5ส</option>
       <option value="kaizen">Kaizen</option>
@@ -261,238 +166,190 @@
       <option value="aircon">เครื่องปรับอากาศ</option>
     </select>
 
-    <label id="signLabel">ลายเซ็น</label>
-    <canvas id="signature-pad" width="600" height="300"></canvas>
+    <label for="signature-pad">ลายเซ็น</label>
+    <canvas id="signature-pad" width="500" height="200"></canvas>
 
-    <div class="buttons">
-      <button onclick="clearCanvas()" id="clearBtn">ล้างลายเซ็น</button>
-      <button onclick="saveData(event)" id="saveBtn">บันทึกข้อมูล</button>
+    <button onclick="clearCanvas()">ล้างลายเซ็น</button>
+    <button onclick="saveData()">บันทึกข้อมูล</button>
+    <div id="loader" style="display: none; text-align: center; margin-top: 20px;">
+  ⏳ กำลังบันทึกข้อมูล...
     </div>
   </div>
 
-  <div id="toast" class="toast"></div>
+  <div id="toast"></div>
 
   <script>
-    const langPack = {
-      th: {
-        formTitle: "แบบฟอร์มเซ็นชื่อเข้าอบรม",
-        nameLabel: "ชื่อ-นามสกุล",
-        dateLabel: "วันที่",
-        topicLabel: "หัวข้ออบรม",
-        signLabel: "ลายเซ็น",
-        clearBtn: "ล้างลายเซ็น",
-        saveBtn: "บันทึกข้อมูล",
-        placeholder: "กรอกชื่อ-นามสกุล",
-        alerts: {
-          name: "กรุณากรอกชื่อ-นามสกุล",
-          topic: "กรุณาเลือกหัวข้ออบรม",
-          sign: "กรุณาเซ็นชื่อก่อนบันทึก",
-          success: "บันทึกข้อมูลสำเร็จ",
-          error: "เกิดข้อผิดพลาดในการบันทึก"
-        }
-      },
-      en: {
-        formTitle: "Training Sign-in Form",
-        nameLabel: "Full Name",
-        dateLabel: "Date",
-        topicLabel: "Training Topic",
-        signLabel: "Signature",
-        clearBtn: "Clear Signature",
-        saveBtn: "Save Data",
-        placeholder: "Enter your full name",
-        alerts: {
-          name: "Please enter your name",
-          topic: "Please select a topic",
-          sign: "Please sign before saving",
-          success: "Saved successfully",
-          error: "An error occurred while saving"
-        }
-      },
-      mm: {
-        formTitle: "သင်တန်းတက်ရောက်သူ လက်မှတ်ရေးထိုးဖောင်",
-        nameLabel: "အမည်အပြည့်အစုံ",
-        dateLabel: "ရက်စွဲ",
-        topicLabel: "သင်တန်းအကြောင်းအရာ",
-        signLabel: "လက်မှတ်",
-        clearBtn: "လက်မှတ်ဖျက်ရန်",
-        saveBtn: "သိမ်းမည်",
-        placeholder: "အမည်ထည့်ပါ",
-        alerts: {
-          name: "အမည်ထည့်ပါ",
-          topic: "သင်တန်းအကြောင်းရွေးပါ",
-          sign: "လက်မှတ်ရေးပါ",
-          success: "သိမ်းဆည်းပြီးပါပြီ",
-          error: "အမှားအယွင်းရှိသည်"
-        }
-      }
+  const employeeData = [
+    { empId: "1001254", fullName: "สมชาย ใจดี" },
+    { empId: "1002756", fullName: "สุรีย์พร แก้วใส" },
+    { empId: "1003985", fullName: "ธีรศักดิ์ ชูศิลป์" },
+    { empId: "1673231", fullName: "โบ๊ทนะ" },
+    { empId: "1004165", fullName: "จารุวรรณ มหานิล" }
+  ];
+
+  const empIdInput = document.getElementById('empId');
+  const fullNameInput = document.getElementById('fullName');
+  const canvas = document.getElementById('signature-pad');
+  const ctx = canvas.getContext('2d');
+  const loader = document.getElementById('loader');
+
+  let drawing = false;
+
+  // วันที่
+  document.getElementById('dateField').value = new Date().toLocaleDateString('th-TH', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
+  // ขยาย canvas ตามหน้าจอ
+  function resizeCanvas() {
+    const container = document.querySelector('.container');
+    canvas.width = container.offsetWidth - 40;
+    canvas.height = 200;
+    clearCanvas();
+  }
+  window.addEventListener('load', resizeCanvas);
+  window.addEventListener('resize', resizeCanvas);
+
+  // ค้นหาพนักงาน
+  function lookupEmployee() {
+    const empId = empIdInput.value.trim();
+
+    if (!/^\d{7}$/.test(empId)) {
+      fullNameInput.value = '';
+      return showToast("รหัสพนักงานต้องเป็นตัวเลข 7 หลัก", true);
+    }
+
+    const found = employeeData.find(emp => emp.empId === empId);
+    if (found) {
+      fullNameInput.value = found.fullName;
+      showToast("พบพนักงาน");
+    } else {
+      fullNameInput.value = '';
+      showToast("ไม่พบรหัสพนักงาน", true);
+    }
+  }
+
+  // วาดลายเซ็น
+  ctx.lineWidth = 2;
+  ctx.lineCap = 'round';
+
+  function getCanvasPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+  }
+
+  canvas.addEventListener('mousedown', e => {
+    drawing = true;
+    const pos = getCanvasPos(e);
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+  });
+
+  canvas.addEventListener('mousemove', e => {
+    if (!drawing) return;
+    const pos = getCanvasPos(e);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+  });
+
+  canvas.addEventListener('mouseup', () => drawing = false);
+  canvas.addEventListener('mouseout', () => drawing = false);
+
+  // รองรับ touch
+  canvas.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    ctx.beginPath();
+    ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+    drawing = true;
+  });
+
+  canvas.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+    if (!drawing) return;
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+    ctx.stroke();
+  });
+
+  canvas.addEventListener('touchend', () => drawing = false);
+
+  function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function isCanvasBlank(c) {
+    const pixelBuffer = new Uint32Array(c.getContext('2d')
+      .getImageData(0, 0, c.width, c.height).data.buffer);
+    return !pixelBuffer.some(color => color !== 0);
+  }
+
+  function saveData() {
+    const fullName = fullNameInput.value.trim();
+    const topic = document.getElementById('trainingTopic').value;
+    const signature = canvas.toDataURL();
+
+    if (!fullName) return showToast("กรุณากรอกรหัสพนักงานให้ถูกต้อง", true);
+    if (!topic) return showToast("กรุณาเลือกหัวข้ออบรม", true);
+    if (isCanvasBlank(canvas)) return showToast("กรุณาเซ็นชื่อก่อน", true);
+
+    const data = {
+      name: fullName,
+      date: new Date().toLocaleDateString('th-TH'),
+      topic: topic,
+      signature: signature
     };
 
-    let currentLang = 'th';
+    loader.style.display = "block";
 
-    function switchLang(lang) {
-      currentLang = lang;
-      const l = langPack[lang];
-      document.getElementById('formTitle').textContent = l.formTitle;
-      document.getElementById('nameLabel').textContent = l.nameLabel;
-      document.getElementById('dateLabel').textContent = l.dateLabel;
-      document.getElementById('topicLabel').textContent = l.topicLabel;
-      document.getElementById('signLabel').textContent = l.signLabel;
-      document.getElementById('clearBtn').textContent = l.clearBtn;
-      document.getElementById('saveBtn').textContent = l.saveBtn;
-      document.getElementById('fullName').placeholder = l.placeholder;
-      
-      document.querySelectorAll('.lang-switch button').forEach(btn => {
-        btn.classList.remove('active');
-      });
-      document.getElementById(`lang-${lang}`).classList.add('active');
-    }
+    const url = 'https://script.google.com/macros/s/AKfycbzfxFGrXjyfLfXBza4dXaf-_RNKiehJZs4FuJyAcdTfvj29Uzw3lehg5cqQlMfRDUapew/exec';
 
-    document.getElementById('dateField').value = new Date().toLocaleDateString('th-TH', {
-        year: 'numeric', month: 'long', day: 'numeric'
+    fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(() => {
+      loader.style.display = "none";
+      showToast("บันทึกข้อมูลสำเร็จ");
+      resetForm();
+    }).catch(() => {
+      loader.style.display = "none";
+      showToast("เกิดข้อผิดพลาด", true);
     });
+  }
 
-    const canvas = document.getElementById('signature-pad');
-    const ctx = canvas.getContext('2d');
-    ctx.strokeStyle = '#34495e';
-    ctx.lineWidth = 3;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    let isDrawing = false;
-    let lastX = 0;
-    let lastY = 0;
+  function resetForm() {
+    fullNameInput.value = '';
+    empIdInput.value = '';
+    document.getElementById('trainingTopic').value = '';
+    clearCanvas();
+  }
 
-    function getMousePos(canvasDom, mouseEvent) {
-      const rect = canvasDom.getBoundingClientRect();
-      return {
-        x: mouseEvent.clientX - rect.left,
-        y: mouseEvent.clientY - rect.top
-      };
+  function showToast(message, isError = false) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.style.background = isError ? '#e74c3c' : '#2ecc71';
+    toast.style.display = 'block';
+    setTimeout(() => toast.style.display = 'none', 3000);
+  }
+
+  empIdInput.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") lookupEmployee();
+  });
+
+  document.addEventListener("keypress", function (e) {
+    if (e.key === "Enter" && document.activeElement.id !== "empId") {
+      saveData();
     }
-
-    function getTouchPos(canvasDom, touchEvent) {
-        const rect = canvasDom.getBoundingClientRect();
-        return {
-            x: touchEvent.touches[0].clientX - rect.left,
-            y: touchEvent.touches[0].clientY - rect.top
-        };
-    }
-
-    function draw(e) {
-        if (!isDrawing) return;
-        
-        let pos;
-        if (e.type.startsWith('touch')) {
-            e.preventDefault();
-            pos = getTouchPos(canvas, e);
-        } else {
-            pos = getMousePos(canvas, e);
-        }
-
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(pos.x, pos.y);
-        ctx.stroke();
-        [lastX, lastY] = [pos.x, pos.y];
-    }
-
-    function startDrawing(e) {
-        isDrawing = true;
-        let pos;
-        if (e.type.startsWith('touch')) {
-            e.preventDefault();
-            pos = getTouchPos(canvas, e);
-        } else {
-            pos = getMousePos(canvas, e);
-        }
-        [lastX, lastY] = [pos.x, pos.y];
-    }
-    
-    function stopDrawing() {
-        isDrawing = false;
-    }
-
-    canvas.addEventListener('mousedown', startDrawing);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', stopDrawing);
-    canvas.addEventListener('mouseout', stopDrawing);
-
-    canvas.addEventListener('touchstart', startDrawing);
-    canvas.addEventListener('touchmove', draw);
-    canvas.addEventListener('touchend', stopDrawing);
-
-    function isCanvasBlank(c) {
-      return !c.getContext('2d')
-        .getImageData(0, 0, c.width, c.height).data
-        .some(channel => channel !== 0);
-    }
-
-    function clearCanvas() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    function showToast(message, type = 'success') {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.className = `toast show ${type}`;
-      setTimeout(() => {
-        toast.className = toast.className.replace('show', '');
-      }, 3000);
-    }
-
-    function clearForm() {
-      document.getElementById('fullName').value = '';
-      document.getElementById('trainingTopic').value = '';
-      document.getElementById('dateField').value = new Date().toLocaleDateString('th-TH', {
-        year: 'numeric', month: 'long', day: 'numeric'
-      });
-      clearCanvas();
-    }
-
-    function saveData(event) {
-      const fullName = document.getElementById('fullName').value.trim();
-      const topic = document.getElementById('trainingTopic').value;
-      const saveBtn = event.target;
-      const t = langPack[currentLang].alerts;
-
-      if (!fullName) return showToast(t.name, 'error');
-      if (!topic) return showToast(t.topic, 'error');
-      if (isCanvasBlank(canvas)) return showToast(t.sign, 'error');
-      if (saveBtn.disabled) return;
-
-      const data = {
-        name: fullName,
-        date: new Date().toLocaleDateString('th-TH'),
-        topic: topic,
-        signature: canvas.toDataURL('image/png')
-      };
-
-      saveBtn.disabled = true;
-      const originalBtnText = langPack[currentLang].saveBtn;
-      saveBtn.textContent = originalBtnText + '...';
-
-      const googleScriptURL = 'https://script.google.com/macros/s/AKfycbzfxFGrXjyfLfXBza4dXaf-_RNKiehJZs4FuJyAcdTfvj29Uzw3lehg5cqQlMfRDUapew/exec';
-
-      fetch(googleScriptURL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      })
-      .then(() => {
-        showToast(t.success, 'success');
-        clearForm();
-      })
-      .catch((error) => {
-        console.error("Fetch Error:", error);
-        showToast(t.error, 'error');
-      })
-      .finally(() => {
-        saveBtn.disabled = false;
-        saveBtn.textContent = originalBtnText;
-      });
-    }
-
-    switchLang('th');
-  </script>
+  });
+</script>
 </body>
 </html>
