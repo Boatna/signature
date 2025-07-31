@@ -138,6 +138,17 @@
         visibility: hidden;
       }
     }
+
+    @media (max-width: 600px) {
+  .container {
+    padding: 20px;
+  }
+
+  canvas {
+    height: 150px;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -151,6 +162,9 @@
 
     <label for="fullName">ชื่อ-นามสกุล</label>
     <input type="text" id="fullName" readonly placeholder="ชื่อ-นามสกุล">
+
+    <label for="department">แผนก/ฝ่าย</label>
+    <input type="text" id="department" readonly placeholder="ชื่อแผนกหรือฝ่าย">
 
     <label for="dateField">วันที่</label>
     <input type="text" id="dateField" readonly>
@@ -178,177 +192,197 @@
   <div id="toast"></div>
 
   <script>
-  const employeeData = [
-    { empId: "1001254", fullName: "สมชาย ใจดี" },
-    { empId: "1002756", fullName: "สุรีย์พร แก้วใส" },
-    { empId: "1003985", fullName: "ธีรศักดิ์ ชูศิลป์" },
-    { empId: "1673231", fullName: "โบ๊ทนะ" },
-    { empId: "1004165", fullName: "จารุวรรณ มหานิล" }
-  ];
+    const employeeData = [
+        { empId: "1001254", fullName: "สมชาย ใจดี", department: "ฝ่ายผลิต" },
+        { empId: "1002756", fullName: "สุรีย์พร แก้วใส", department: "ฝ่ายซ่อมบำรุง" },
+        { empId: "1003985", fullName: "ธีรศักดิ์ ชูศิลป์", department: "ฝ่ายไอที" },
+        { empId: "1673231", fullName: "โบ๊ทนะ", department: "IT support" },
+        { empId: "1004165", fullName: "จารุวรรณ มหานิล", department: "ฝ่ายบุคคล" }
+    ];
 
-  const empIdInput = document.getElementById('empId');
-  const fullNameInput = document.getElementById('fullName');
-  const canvas = document.getElementById('signature-pad');
-  const ctx = canvas.getContext('2d');
-  const loader = document.getElementById('loader');
-
-  let drawing = false;
-
-  // วันที่
-  document.getElementById('dateField').value = new Date().toLocaleDateString('th-TH', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-
-  // ขยาย canvas ตามหน้าจอ
-  function resizeCanvas() {
-    const container = document.querySelector('.container');
-    canvas.width = container.offsetWidth - 40;
-    canvas.height = 200;
-    clearCanvas();
-  }
-  window.addEventListener('load', resizeCanvas);
-  window.addEventListener('resize', resizeCanvas);
-
-  // ค้นหาพนักงาน
-  function lookupEmployee() {
-    const empId = empIdInput.value.trim();
-
-    if (!/^\d{7}$/.test(empId)) {
-      fullNameInput.value = '';
-      return showToast("รหัสพนักงานต้องเป็นตัวเลข 7 หลัก", true);
-    }
-
-    const found = employeeData.find(emp => emp.empId === empId);
-    if (found) {
-      fullNameInput.value = found.fullName;
-      showToast("พบพนักงาน");
-    } else {
-      fullNameInput.value = '';
-      showToast("ไม่พบรหัสพนักงาน", true);
-    }
-  }
-
-  // วาดลายเซ็น
-  ctx.lineWidth = 2;
-  ctx.lineCap = 'round';
-
-  function getCanvasPos(e) {
-    const rect = canvas.getBoundingClientRect();
-    return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top
-    };
-  }
-
-  canvas.addEventListener('mousedown', e => {
-    drawing = true;
-    const pos = getCanvasPos(e);
-    ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
-  });
-
-  canvas.addEventListener('mousemove', e => {
-    if (!drawing) return;
-    const pos = getCanvasPos(e);
-    ctx.lineTo(pos.x, pos.y);
-    ctx.stroke();
-  });
-
-  canvas.addEventListener('mouseup', () => drawing = false);
-  canvas.addEventListener('mouseout', () => drawing = false);
-
-  // รองรับ touch
-  canvas.addEventListener('touchstart', function(e) {
-    e.preventDefault();
-    const touch = e.touches[0];
-    const rect = canvas.getBoundingClientRect();
-    ctx.beginPath();
-    ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
-    drawing = true;
-  });
-
-  canvas.addEventListener('touchmove', function(e) {
-    e.preventDefault();
-    if (!drawing) return;
-    const touch = e.touches[0];
-    const rect = canvas.getBoundingClientRect();
-    ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
-    ctx.stroke();
-  });
-
-  canvas.addEventListener('touchend', () => drawing = false);
-
-  function clearCanvas() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }
-
-  function isCanvasBlank(c) {
-    const pixelBuffer = new Uint32Array(c.getContext('2d')
-      .getImageData(0, 0, c.width, c.height).data.buffer);
-    return !pixelBuffer.some(color => color !== 0);
-  }
-
-  function saveData() {
-    const fullName = fullNameInput.value.trim();
-    const topic = document.getElementById('trainingTopic').value;
-    const signature = canvas.toDataURL();
-
-    if (!fullName) return showToast("กรุณากรอกรหัสพนักงานให้ถูกต้อง", true);
-    if (!topic) return showToast("กรุณาเลือกหัวข้ออบรม", true);
-    if (isCanvasBlank(canvas)) return showToast("กรุณาเซ็นชื่อก่อน", true);
-
-    const data = {
-      name: fullName,
-      date: new Date().toLocaleDateString('th-TH'),
-      topic: topic,
-      signature: signature
-    };
-
-    loader.style.display = "block";
-
-    const url = 'https://script.google.com/macros/s/AKfycbzfxFGrXjyfLfXBza4dXaf-_RNKiehJZs4FuJyAcdTfvj29Uzw3lehg5cqQlMfRDUapew/exec';
-
-    fetch(url, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    }).then(() => {
-      loader.style.display = "none";
-      showToast("บันทึกข้อมูลสำเร็จ");
-      resetForm();
-    }).catch(() => {
-      loader.style.display = "none";
-      showToast("เกิดข้อผิดพลาด", true);
-    });
-  }
-
-  function resetForm() {
-    fullNameInput.value = '';
-    empIdInput.value = '';
-    document.getElementById('trainingTopic').value = '';
-    clearCanvas();
-  }
-
-  function showToast(message, isError = false) {
+    const empIdInput = document.getElementById('empId');
+    const fullNameInput = document.getElementById('fullName');
+    const departmentInput = document.getElementById('department');
+    const trainingTopicSelect = document.getElementById('trainingTopic');
+    const canvas = document.getElementById('signature-pad');
+    const ctx = canvas.getContext('2d');
+    const loader = document.getElementById('loader');
     const toast = document.getElementById('toast');
-    toast.textContent = message;
-    toast.style.background = isError ? '#e74c3c' : '#2ecc71';
-    toast.style.display = 'block';
-    setTimeout(() => toast.style.display = 'none', 3000);
-  }
 
-  empIdInput.addEventListener("keypress", function(e) {
-    if (e.key === "Enter") lookupEmployee();
-  });
+    let drawing = false;
 
-  document.addEventListener("keypress", function (e) {
-    if (e.key === "Enter" && document.activeElement.id !== "empId") {
-      saveData();
+    // ตั้งค่าวันที่ปัจจุบัน
+    document.getElementById('dateField').value = new Date().toLocaleDateString('th-TH', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+
+    // ปรับขนาด Canvas ให้พอดีกับ Container
+    function resizeCanvas() {
+        const container = document.querySelector('.container');
+        const padding = parseFloat(getComputedStyle(container).paddingLeft) * 2;
+        canvas.width = container.offsetWidth - padding;
+        canvas.height = 200;
+        clearCanvas();
     }
-  });
+    window.addEventListener('load', resizeCanvas);
+    window.addEventListener('resize', resizeCanvas);
+
+    // ค้นหาข้อมูลพนักงาน
+    function lookupEmployee() {
+        const empId = empIdInput.value.trim();
+        // ล้างข้อมูลเก่าทุกครั้งที่ค้นหา
+        fullNameInput.value = '';
+        departmentInput.value = '';
+
+        if (!/^\d{7}$/.test(empId)) {
+            return showToast("รหัสพนักงานต้องเป็นตัวเลข 7 หลัก", true);
+        }
+
+        const found = employeeData.find(emp => emp.empId === empId);
+        if (found) {
+            fullNameInput.value = found.fullName;
+            departmentInput.value = found.department || '';
+            showToast("พบพนักงาน");
+        } else {
+            showToast("ไม่พบรหัสพนักงาน", true);
+        }
+    }
+
+    // ตั้งค่าปากกาสำหรับวาด
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#333';
+
+    // ฟังก์ชันสำหรับหาตำแหน่ง Mouse/Touch บน Canvas
+    function getEventPosition(e) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        
+        if (e.touches && e.touches.length > 0) {
+            return {
+                x: (e.touches[0].clientX - rect.left) * scaleX,
+                y: (e.touches[0].clientY - rect.top) * scaleY
+            };
+        }
+        return {
+            x: (e.clientX - rect.left) * scaleX,
+            y: (e.clientY - rect.top) * scaleY
+        };
+    }
+
+    function startDrawing(e) {
+        e.preventDefault();
+        drawing = true;
+        const pos = getEventPosition(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+    }
+
+    function draw(e) {
+        if (!drawing) return;
+        e.preventDefault();
+        const pos = getEventPosition(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+    }
+
+    function stopDrawing() {
+        drawing = false;
+    }
+
+    // Event Listeners สำหรับการวาด
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+    canvas.addEventListener('touchstart', startDrawing);
+    canvas.addEventListener('touchmove', draw);
+    canvas.addEventListener('touchend', stopDrawing);
+
+    // ฟังก์ชันล้างลายเซ็น
+    function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // ฟังก์ชันตรวจสอบว่า Canvas ว่างหรือไม่
+    function isCanvasBlank() {
+        const pixelBuffer = new Uint32Array(ctx.getImageData(0, 0, canvas.width, canvas.height).data.buffer);
+        return !pixelBuffer.some(color => color !== 0);
+    }
+
+    // ฟังก์ชันบันทึกข้อมูล
+    function saveData() {
+        const fullName = fullNameInput.value.trim();
+        const department = departmentInput.value.trim();
+        const topic = trainingTopicSelect.value;
+
+        if (!fullName || !department) return showToast("กรุณากรอกรหัสพนักงานให้ถูกต้อง", true);
+        if (!topic) return showToast("กรุณาเลือกหัวข้ออบรม", true);
+        if (isCanvasBlank()) return showToast("กรุณาเซ็นชื่อก่อนบันทึก", true);
+
+        const signature = canvas.toDataURL('image/png');
+        const data = {
+          name: fullName,
+          empId: empIdInput.value.trim(), 
+          department: department,
+          date: new Date().toLocaleString('th-TH', { dateStyle: 'long', timeStyle: 'short' }),
+          topic: topic,
+          signature: signature
+        };
+
+        loader.style.display = "block";
+        const url = 'https://script.google.com/macros/s/AKfycbw9GOaLYyBi0e8cI5-A1XSb0DspPGUZd5ZmRTGl0jIMdHBzfSORx0il46hfEnodlHnV6Q/exec';
+
+        fetch(url, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).then(() => {
+            showToast("บันทึกข้อมูลสำเร็จ");
+            resetForm();
+        }).catch((error) => {
+            console.error('Fetch Error:', error);
+            showToast("เกิดข้อผิดพลาดในการเชื่อมต่อ", true);
+        }).finally(() => {
+            loader.style.display = "none";
+        });
+    }
+
+    // ฟังก์ชันล้างฟอร์มทั้งหมด
+    function resetForm() {
+        empIdInput.value = '';
+        fullNameInput.value = '';
+        departmentInput.value = '';
+        trainingTopicSelect.value = '';
+        clearCanvas();
+    }
+
+    // ฟังก์ชันแสดงข้อความแจ้งเตือน
+    function showToast(message, isError = false) {
+        toast.textContent = message;
+        toast.style.background = isError ? '#e74c3c' : '#2ecc71';
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    }
+
+    // Event Listener สำหรับการกด Enter
+    empIdInput.addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            lookupEmployee();
+        }
+    });
+
+    document.addEventListener("keypress", function (e) {
+        if (e.key === "Enter" && document.activeElement.tagName !== 'BUTTON' && document.activeElement.id !== 'empId') {
+            e.preventDefault();
+            saveData();
+        }
+    });
 </script>
 </body>
 </html>
