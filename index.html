@@ -324,9 +324,10 @@
         if (isCanvasBlank()) return showToast("กรุณาเซ็นชื่อก่อนบันทึก", true);
 
         const signature = canvas.toDataURL('image/png');
+        const empId = empIdInput.value.trim();
         const data = {
           name: fullName,
-          empId: empIdInput.value.trim(), 
+          empId: empIdInput.value.trim(),  // ← ต้องใช้ empId
           department: department,
           date: new Date().toLocaleString('th-TH', { dateStyle: 'long', timeStyle: 'short' }),
           topic: topic,
@@ -334,7 +335,7 @@
         };
 
         loader.style.display = "block";
-        const url = 'https://script.google.com/macros/s/AKfycbw9GOaLYyBi0e8cI5-A1XSb0DspPGUZd5ZmRTGl0jIMdHBzfSORx0il46hfEnodlHnV6Q/exec';
+        const url = 'https://script.google.com/macros/s/AKfycbzyFtKh2iIDpEqEzlqcI2OzqHgAD4x4FTIlWc2PYcIrV5VDaqtSyut3H4j8ujrQHhtkzw/exec';
 
         fetch(url, {
             method: 'POST',
