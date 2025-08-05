@@ -148,7 +148,20 @@
     height: 150px;
   }
 }
+.spinner {
+  margin: auto;
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
 
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
   </style>
 </head>
 <body>
@@ -184,9 +197,10 @@
 
     <button onclick="clearCanvas()">ล้างลายเซ็น</button>
     <button onclick="saveData()">บันทึกข้อมูล</button>
-    <div id="loader" style="display: none; text-align: center; margin-top: 20px;">
-    ⏳ กำลังบันทึกข้อมูล...
-    </div>
+    <div id="loader" style="display:none; text-align:center; margin-top:20px;">
+  <div class="spinner"></div>
+  <p>⏳ กำลังบันทึกข้อมูล...</p>
+  </div>
   </div>
 
   <div id="toast"></div>
