@@ -185,7 +185,7 @@
     <label for="trainingTopic">หัวข้ออบรม</label>
     <select id="trainingTopic">
       <option value="">-- กรุณาเลือกหัวข้อ --</option>
-      <option value="5ส">5ส</option>
+      <option value="5ส">โครงการบูรณาการการเรียนรู้ร่วมกับการทำงาน</option>
       <option value="kaizen">Kaizen</option>
       <option value="safety">ความปลอดภัย</option>
       <option value="electrical">ไฟฟ้า</option>
@@ -207,11 +207,33 @@
 
   <script>
     const employeeData = [
-        { empId: "1001254", fullName: "สมชาย ใจดี", department: "ฝ่ายผลิต" },
-        { empId: "1002756", fullName: "สุรีย์พร แก้วใส", department: "ฝ่ายซ่อมบำรุง" },
-        { empId: "1003985", fullName: "ธีรศักดิ์ ชูศิลป์", department: "ฝ่ายไอที" },
-        { empId: "1673231", fullName: "โบ๊ทนะ", department: "IT support" },
-        { empId: "1004165", fullName: "จารุวรรณ มหานิล", department: "ฝ่ายบุคคล" }
+        { empId: "66122536001", fullName: "นายอนุวัฒน์ ชินภักดี", department: "นักศึกษา" },
+        { empId: "66122536002", fullName: "นางสาวสุมนา เจียรบํารุงพันธ์", department: "นักศึกษา" },
+        { empId: "66122536004", fullName: "นายสุภาคีนัย ยิ้มใจบุญ", department: "นักศึกษา" },
+        { empId: "66122536005", fullName: "นางสาวสุพรรณิกา ฝอยทอง", department: "นักศึกษา" },
+        { empId: "66122536006", fullName: "นายธนากร บุญไกร", department: "นักศึกษา" },
+        { empId: "66122536007", fullName: "นายกฤษฎา ครองทรัพย์", department: "นักศึกษา" },
+        { empId: "66122536008", fullName: "นายยงยุทธ ชาบัน", department: "นักศึกษา" },
+        { empId: "66122536009", fullName: "นายธนพันธ์ จิตจํานงค์", department: "นักศึกษา" },
+        { empId: "66122536011", fullName: "นายปฏิภาณ นามะสนธิ", department: "นักศึกษา" },
+        { empId: "66122536012", fullName: "นายภาสกร พลศรี", department: "นักศึกษา" },
+        { empId: "66122536013", fullName: "นายสุทิวัส ด้วงวงษ์", department: "นักศึกษา" },
+        { empId: "66122536014", fullName: "นายบุณยวัทน์ เบ้าเที่ยง", department: "นักศึกษา" },
+        { empId: "66122536015", fullName: "นายอนวัช นุ่มแปลก", department: "นักศึกษา" },
+        { empId: "66122536016", fullName: "นายกัมปนาท ใจสุข", department: "นักศึกษา" },
+        { empId: "66122536019", fullName: "นายพงศกร ร้อยชั่ง", department: "นักศึกษา" },
+        { empId: "66122536020", fullName: "นายสุธินันท์ อ่อนแสน", department: "นักศึกษา" },
+        { empId: "66122536021", fullName: "นายวิริทธ์ิพล เทียนซ้อน", department: "นักศึกษา" },
+        { empId: "66122536023", fullName: "นายวรทัศน์ มอญถนอม", department: "นักศึกษา" },
+        { empId: "66122536025", fullName: "นายภคทิต ธานีโรจน์", department: "นักศึกษา" },
+        { empId: "66122536026", fullName: "นายสุริยะ สัมฤทธ์ิดี", department: "นักศึกษา" },
+        { empId: "66122536027", fullName: "นายธนภัทร ศิริรัตน์", department: "นักศึกษา" },
+        { empId: "66122536028", fullName: "นายรัฐพล วงชารี", department: "นักศึกษา" },
+        { empId: "66122536029", fullName: "นายก้องกล้า อภัยวงษ์", department: "นักศึกษา" },
+        { empId: "66122536030", fullName: "นายวิริยะ รักผึ้ง", department: "นักศึกษา" },
+        { empId: "66122536032", fullName: "นายธนภัทร วงศ์สิม", department: "นักศึกษา" },
+        { empId: "66122536033", fullName: "นายกิตติทัต ขันแก้ว", department: "นักศึกษา" },
+        { empId: "66122536034", fullName: "นายกฤษณพัฒน์ แครจี", department: "นักศึกษา" }
     ];
 
     const empIdInput = document.getElementById('empId');
@@ -249,10 +271,6 @@
         // ล้างข้อมูลเก่าทุกครั้งที่ค้นหา
         fullNameInput.value = '';
         departmentInput.value = '';
-
-        if (!/^\d{7}$/.test(empId)) {
-            return showToast("รหัสพนักงานต้องเป็นตัวเลข 7 หลัก", true);
-        }
 
         const found = employeeData.find(emp => emp.empId === empId);
         if (found) {
